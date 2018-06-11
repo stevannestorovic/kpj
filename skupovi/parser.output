@@ -1,0 +1,207 @@
+Grammar
+
+    0 $accept: Program $end
+
+    1 Program: Program Naredba
+    2        | Naredba
+
+    3 Naredba: id_token '=' Skup ';'
+    4        | print_token id_token ';'
+
+    5 Skup: '{' NizBrojeva '}'
+    6     | num_token range_token num_token
+
+    7 NizBrojeva: NizBrojeva ',' num_token
+    8           | num_token
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+',' (44) 7
+';' (59) 3 4
+'=' (61) 3
+'{' (123) 5
+'}' (125) 5
+error (256)
+num_token (258) 6 7 8
+id_token (259) 3 4
+range_token (260) 6
+print_token (261) 4
+
+
+Nonterminals, with rules where they appear
+
+$accept (12)
+    on left: 0
+Program (13)
+    on left: 1 2, on right: 0 1
+Naredba (14)
+    on left: 3 4, on right: 1 2
+Skup (15)
+    on left: 5 6, on right: 3
+NizBrojeva (16)
+    on left: 7 8, on right: 5 7
+
+
+State 0
+
+    0 $accept: . Program $end
+
+    id_token     shift, and go to state 1
+    print_token  shift, and go to state 2
+
+    Program  go to state 3
+    Naredba  go to state 4
+
+
+State 1
+
+    3 Naredba: id_token . '=' Skup ';'
+
+    '='  shift, and go to state 5
+
+
+State 2
+
+    4 Naredba: print_token . id_token ';'
+
+    id_token  shift, and go to state 6
+
+
+State 3
+
+    0 $accept: Program . $end
+    1 Program: Program . Naredba
+
+    $end         shift, and go to state 7
+    id_token     shift, and go to state 1
+    print_token  shift, and go to state 2
+
+    Naredba  go to state 8
+
+
+State 4
+
+    2 Program: Naredba .
+
+    $default  reduce using rule 2 (Program)
+
+
+State 5
+
+    3 Naredba: id_token '=' . Skup ';'
+
+    num_token  shift, and go to state 9
+    '{'        shift, and go to state 10
+
+    Skup  go to state 11
+
+
+State 6
+
+    4 Naredba: print_token id_token . ';'
+
+    ';'  shift, and go to state 12
+
+
+State 7
+
+    0 $accept: Program $end .
+
+    $default  accept
+
+
+State 8
+
+    1 Program: Program Naredba .
+
+    $default  reduce using rule 1 (Program)
+
+
+State 9
+
+    6 Skup: num_token . range_token num_token
+
+    range_token  shift, and go to state 13
+
+
+State 10
+
+    5 Skup: '{' . NizBrojeva '}'
+
+    num_token  shift, and go to state 14
+
+    NizBrojeva  go to state 15
+
+
+State 11
+
+    3 Naredba: id_token '=' Skup . ';'
+
+    ';'  shift, and go to state 16
+
+
+State 12
+
+    4 Naredba: print_token id_token ';' .
+
+    $default  reduce using rule 4 (Naredba)
+
+
+State 13
+
+    6 Skup: num_token range_token . num_token
+
+    num_token  shift, and go to state 17
+
+
+State 14
+
+    8 NizBrojeva: num_token .
+
+    $default  reduce using rule 8 (NizBrojeva)
+
+
+State 15
+
+    5 Skup: '{' NizBrojeva . '}'
+    7 NizBrojeva: NizBrojeva . ',' num_token
+
+    '}'  shift, and go to state 18
+    ','  shift, and go to state 19
+
+
+State 16
+
+    3 Naredba: id_token '=' Skup ';' .
+
+    $default  reduce using rule 3 (Naredba)
+
+
+State 17
+
+    6 Skup: num_token range_token num_token .
+
+    $default  reduce using rule 6 (Skup)
+
+
+State 18
+
+    5 Skup: '{' NizBrojeva '}' .
+
+    $default  reduce using rule 5 (Skup)
+
+
+State 19
+
+    7 NizBrojeva: NizBrojeva ',' . num_token
+
+    num_token  shift, and go to state 20
+
+
+State 20
+
+    7 NizBrojeva: NizBrojeva ',' num_token .
+
+    $default  reduce using rule 7 (NizBrojeva)

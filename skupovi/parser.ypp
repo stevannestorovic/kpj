@@ -1,0 +1,64 @@
+%{
+#define YYDEBUG 1
+#include <iostream>
+#include <string>
+#include <map>
+#include <algorithm>
+#include <cstdlib>
+#include "Skup.hpp"
+using namespace std;
+extern int yylex();
+void yyerror(string s) {
+	cerr << "Doslo je do greske: \n" << endl;
+	exit(EXIT_FAILURE);
+}
+map<string, Skup*> tablica;
+%}
+
+
+%union {
+	int broj;
+       	string *ime;
+	vector<int> *v;
+        Skup *skup;
+}
+
+%token <broj> num_token
+%token <ime> id_token
+%token range_token print_token
+
+%type <v> NizBrojeva
+%type <skup> Skup
+
+%%
+Program: Program Naredba  
+| Naredba 
+;
+
+Naredba: id_token '=' Skup  ';' {
+					tablica[*$1] = $3;
+					delete $1;
+				}
+| print_token  id_token ';' {
+//				std::map<string, Skup*>::iterator i = tablica.find($2);
+//				if(i == tablica.end()) yyerror("Ne postoji taj polinom");
+//				tablica[$2]->ispisi();
+			    }
+       ;
+
+Skup: '{' NizBrojeva '}' {$$ = new Skup(*$2);}
+|   num_token range_token num_token { vector<int> tmp; 
+				      for(int i = $1; i <= $3; i++) tmp.push_back(i);
+	                              $$ = new Skup(tmp);	
+                                    }
+;
+NizBrojeva: NizBrojeva ',' num_token {$$=$1; $$->push_back($3);}
+| num_token {$$ = new vector<int>(); $$->push_back($1);}
+;
+%%
+
+int main() {
+	yydebug =  1;
+	yyparse();
+
+}

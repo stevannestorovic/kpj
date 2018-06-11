@@ -1,0 +1,55 @@
+%{
+#include <iostream>
+#include <string>
+#include <cstdlib>
+#include <map>
+
+using namespace std;
+
+extern int yylex();
+void yyerror(string s) {
+	cerr << "Doslo je do greske:\n";
+	cerr << s;
+	cerr << endl;
+	exit(-1);
+}
+
+
+map<string, float> tablica;
+%}
+
+%union {
+	int broj;
+	std::string *ime;
+}
+
+%token <broj> num_token
+%token <ime> id_token
+
+%type <broj> Izraz
+
+%left '+' '-'
+%left '*' '/'
+
+%%
+Program: Naredba ';' Program
+       |
+       ;
+
+Naredba: id_token '=' Izraz { tablica[*$1] = $3;}
+       | Izraz { cout << "= " << $1 << endl;}
+       ;
+
+Izraz: Izraz '+' Izraz { $$ = $1 + $3;}
+     | Izraz '-' Izraz { $$ = $1 - $3;}
+     | Izraz '*' Izraz { $$ = $1 * $3;}
+     | Izraz '/' Izraz { $$ = $1 / $3;}
+     | num_token { $$ = $1;}
+     | id_token {$$ = tablica[*$1];}
+     ;
+%%
+
+
+int main() {
+	yyparse();
+}

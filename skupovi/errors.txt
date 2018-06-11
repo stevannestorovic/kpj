@@ -1,0 +1,15 @@
+parser.ypp: In function ‘int yyparse()’:
+parser.ypp:48:43: error: no matching function for call to ‘Skup::Skup(std::vector<int>*&)’
+ Skup: '{' NizBrojeva '}' {$$ = new Skup($2);}
+                                           ^
+In file included from parser.ypp:8:0:
+Skup.hpp:11:2: note: candidate: Skup::Skup(std::vector<int>&)
+  Skup(vector<int>&v);
+  ^
+Skup.hpp:11:2: note:   no known conversion for argument 1 from ‘std::vector<int>*’ to ‘std::vector<int>&’
+Skup.hpp:9:7: note: candidate: Skup::Skup(const Skup&)
+ class Skup {
+       ^
+Skup.hpp:9:7: note:   no known conversion for argument 1 from ‘std::vector<int>*’ to ‘const Skup&’
+parser.ypp:54:68: error: expected ‘;’ before ‘}’ token
+make: *** [parser] Error 1

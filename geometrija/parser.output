@@ -1,0 +1,269 @@
+Grammar
+
+    0 $accept: Program $end
+
+    1 Program: Program Naredba ';'
+    2        | Naredba ';'
+
+    3 Naredba: vector_token NizDodela
+    4        | print_token vector_id_token
+    5        | vector_id_token '=' '[' NizBrojeva ']'
+
+    6 NizDodela: NizDodela ',' Dodela
+    7          | Dodela
+
+    8 Dodela: vector_id_token
+    9       | vector_id_token '=' '[' NizBrojeva ']'
+
+   10 NizBrojeva: NizBrojeva ',' num_token
+   11           | num_token
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+',' (44) 6 10
+';' (59) 1 2
+'=' (61) 5 9
+'[' (91) 5 9
+']' (93) 5 9
+error (256)
+num_token (258) 10 11
+vector_id_token (259) 4 5 8 9
+vector_token (260) 3
+print_token (261) 4
+
+
+Nonterminals, with rules where they appear
+
+$accept (12)
+    on left: 0
+Program (13)
+    on left: 1 2, on right: 0 1
+Naredba (14)
+    on left: 3 4 5, on right: 1 2
+NizDodela (15)
+    on left: 6 7, on right: 3 6
+Dodela (16)
+    on left: 8 9, on right: 6 7
+NizBrojeva (17)
+    on left: 10 11, on right: 5 9 10
+
+
+State 0
+
+    0 $accept: . Program $end
+
+    vector_id_token  shift, and go to state 1
+    vector_token     shift, and go to state 2
+    print_token      shift, and go to state 3
+
+    Program  go to state 4
+    Naredba  go to state 5
+
+
+State 1
+
+    5 Naredba: vector_id_token . '=' '[' NizBrojeva ']'
+
+    '='  shift, and go to state 6
+
+
+State 2
+
+    3 Naredba: vector_token . NizDodela
+
+    vector_id_token  shift, and go to state 7
+
+    NizDodela  go to state 8
+    Dodela     go to state 9
+
+
+State 3
+
+    4 Naredba: print_token . vector_id_token
+
+    vector_id_token  shift, and go to state 10
+
+
+State 4
+
+    0 $accept: Program . $end
+    1 Program: Program . Naredba ';'
+
+    $end             shift, and go to state 11
+    vector_id_token  shift, and go to state 1
+    vector_token     shift, and go to state 2
+    print_token      shift, and go to state 3
+
+    Naredba  go to state 12
+
+
+State 5
+
+    2 Program: Naredba . ';'
+
+    ';'  shift, and go to state 13
+
+
+State 6
+
+    5 Naredba: vector_id_token '=' . '[' NizBrojeva ']'
+
+    '['  shift, and go to state 14
+
+
+State 7
+
+    8 Dodela: vector_id_token .
+    9       | vector_id_token . '=' '[' NizBrojeva ']'
+
+    '='  shift, and go to state 15
+
+    $default  reduce using rule 8 (Dodela)
+
+
+State 8
+
+    3 Naredba: vector_token NizDodela .
+    6 NizDodela: NizDodela . ',' Dodela
+
+    ','  shift, and go to state 16
+
+    $default  reduce using rule 3 (Naredba)
+
+
+State 9
+
+    7 NizDodela: Dodela .
+
+    $default  reduce using rule 7 (NizDodela)
+
+
+State 10
+
+    4 Naredba: print_token vector_id_token .
+
+    $default  reduce using rule 4 (Naredba)
+
+
+State 11
+
+    0 $accept: Program $end .
+
+    $default  accept
+
+
+State 12
+
+    1 Program: Program Naredba . ';'
+
+    ';'  shift, and go to state 17
+
+
+State 13
+
+    2 Program: Naredba ';' .
+
+    $default  reduce using rule 2 (Program)
+
+
+State 14
+
+    5 Naredba: vector_id_token '=' '[' . NizBrojeva ']'
+
+    num_token  shift, and go to state 18
+
+    NizBrojeva  go to state 19
+
+
+State 15
+
+    9 Dodela: vector_id_token '=' . '[' NizBrojeva ']'
+
+    '['  shift, and go to state 20
+
+
+State 16
+
+    6 NizDodela: NizDodela ',' . Dodela
+
+    vector_id_token  shift, and go to state 7
+
+    Dodela  go to state 21
+
+
+State 17
+
+    1 Program: Program Naredba ';' .
+
+    $default  reduce using rule 1 (Program)
+
+
+State 18
+
+   11 NizBrojeva: num_token .
+
+    $default  reduce using rule 11 (NizBrojeva)
+
+
+State 19
+
+    5 Naredba: vector_id_token '=' '[' NizBrojeva . ']'
+   10 NizBrojeva: NizBrojeva . ',' num_token
+
+    ']'  shift, and go to state 22
+    ','  shift, and go to state 23
+
+
+State 20
+
+    9 Dodela: vector_id_token '=' '[' . NizBrojeva ']'
+
+    num_token  shift, and go to state 18
+
+    NizBrojeva  go to state 24
+
+
+State 21
+
+    6 NizDodela: NizDodela ',' Dodela .
+
+    $default  reduce using rule 6 (NizDodela)
+
+
+State 22
+
+    5 Naredba: vector_id_token '=' '[' NizBrojeva ']' .
+
+    $default  reduce using rule 5 (Naredba)
+
+
+State 23
+
+   10 NizBrojeva: NizBrojeva ',' . num_token
+
+    num_token  shift, and go to state 25
+
+
+State 24
+
+    9 Dodela: vector_id_token '=' '[' NizBrojeva . ']'
+   10 NizBrojeva: NizBrojeva . ',' num_token
+
+    ']'  shift, and go to state 26
+    ','  shift, and go to state 23
+
+
+State 25
+
+   10 NizBrojeva: NizBrojeva ',' num_token .
+
+    $default  reduce using rule 10 (NizBrojeva)
+
+
+State 26
+
+    9 Dodela: vector_id_token '=' '[' NizBrojeva ']' .
+
+    $default  reduce using rule 9 (Dodela)
