@@ -5,11 +5,12 @@
 using namespace std;
 class Matrix {
 public:
+        Matrix(int, int);
         Matrix();
 //      Matrix(const Matrix& m);
         void ispisi() const;
         vector<vector<double> > getElem();
-        void dodajVrstu(vector<double> v);
+        void dodajVrstu(vector<double>& v);
 /*        Matrix saberi(Matrix m);
         Matrix pomnozi(Matrix m);
         Matrix oduzmi(Matrix m);

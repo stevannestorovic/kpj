@@ -3,6 +3,13 @@
 Matrix::Matrix() {
         _elem.resize(0);
 }
+Matrix::Matrix(int m, int n) {
+        _elem.resize(m);
+        for(int i = 0; i < m; i++) {
+                _elem[i].resize(n);
+        }
+
+}
 /*
 Matrix::Matrix(const Matrix& m) {
         _elem = m.getElem();
@@ -22,8 +29,8 @@ void Matrix::ispisi() const {
         }
 }
 
-void Matrix::dodajVrstu(vector<double> v) {
-       // _elem.resize(_elem.size()+1);
+void Matrix::dodajVrstu(vector<double>& v) {
+//      _elem.resize(_elem.size()+1);
         _elem.push_back(v);
 }
 
