@@ -1,0 +1,68 @@
+%{
+#define YYDEBUG 1
+#include <iostream>
+#include <string>
+#include <map>
+#include <cstdlib>
+#include "Matrix.hpp"
+using namespace std;
+
+extern int yylex();
+void yyerror(string s) {
+        cerr << "Doslo je do greske: " << endl << s << endl;
+        exit(-1);
+}
+map<string, Matrix> tablica;
+%}
+
+%union {
+        string *ime;
+        double broj;
+        Matrix *m;
+        vector<double> *v;
+        vector<vector<double> > *vv;
+}
+
+%token matrix_token print_token 
+%token <ime> id_token
+%token <broj> num_token
+
+%type <v> Vrsta
+%type <m>  Matrix NizVrsta
+%%
+Program: Naredba ';' Program
+       |
+       ;
+
+
+Naredba: Dodela
+       | print_token id_token { tablica[*$2].ispisi();}
+       ;
+
+Dodela: matrix_token NizDekl
+      ;
+
+NizDekl: NizDekl ',' Dekl
+       | Dekl
+       ;
+
+Dekl:  id_token '='  Matrix { tablica[*$1] = *$3;}
+    | id_token {tablica[*$1] = Matrix();}
+    ;
+
+Matrix: '[' NizVrsta ']' { $$ = $2;}
+      ;
+
+NizVrsta: NizVrsta ';' Vrsta {$1->dodajVrstu(*$3);}
+        | Vrsta {$$ = new Matrix(); $$->dodajVrstu(*$1);}
+        ;
+
+Vrsta: Vrsta ',' num_token {$1->push_back($3); }
+     | num_token {$$ = new vector<double>(10); $$->push_back($1);}
+     ;
+%%
+
+int main() {
+        yydebug = 1;
+        yyparse();
+}

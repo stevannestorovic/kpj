@@ -1,0 +1,284 @@
+Grammar
+
+    0 $accept: Program $end
+
+    1 Program: Naredba ';' Program
+    2        | %empty
+
+    3 Naredba: Dodela
+    4        | print_token id_token
+
+    5 Dodela: matrix_token NizDekl
+
+    6 NizDekl: NizDekl ',' Dekl
+    7        | Dekl
+
+    8 Dekl: id_token '=' Matrix
+    9     | id_token
+
+   10 Matrix: '[' NizVrsta ']'
+
+   11 NizVrsta: NizVrsta ';' Vrsta
+   12         | Vrsta
+
+   13 Vrsta: Vrsta ',' num_token
+   14      | num_token
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+',' (44) 6 13
+';' (59) 1 11
+'=' (61) 8
+'[' (91) 10
+']' (93) 10
+error (256)
+matrix_token (258) 5
+print_token (259) 4
+id_token (260) 4 8 9
+num_token (261) 13 14
+
+
+Nonterminals, with rules where they appear
+
+$accept (12)
+    on left: 0
+Program (13)
+    on left: 1 2, on right: 0 1
+Naredba (14)
+    on left: 3 4, on right: 1
+Dodela (15)
+    on left: 5, on right: 3
+NizDekl (16)
+    on left: 6 7, on right: 5 6
+Dekl (17)
+    on left: 8 9, on right: 6 7
+Matrix (18)
+    on left: 10, on right: 8
+NizVrsta (19)
+    on left: 11 12, on right: 10 11
+Vrsta (20)
+    on left: 13 14, on right: 11 12 13
+
+
+State 0
+
+    0 $accept: . Program $end
+
+    matrix_token  shift, and go to state 1
+    print_token   shift, and go to state 2
+
+    $default  reduce using rule 2 (Program)
+
+    Program  go to state 3
+    Naredba  go to state 4
+    Dodela   go to state 5
+
+
+State 1
+
+    5 Dodela: matrix_token . NizDekl
+
+    id_token  shift, and go to state 6
+
+    NizDekl  go to state 7
+    Dekl     go to state 8
+
+
+State 2
+
+    4 Naredba: print_token . id_token
+
+    id_token  shift, and go to state 9
+
+
+State 3
+
+    0 $accept: Program . $end
+
+    $end  shift, and go to state 10
+
+
+State 4
+
+    1 Program: Naredba . ';' Program
+
+    ';'  shift, and go to state 11
+
+
+State 5
+
+    3 Naredba: Dodela .
+
+    $default  reduce using rule 3 (Naredba)
+
+
+State 6
+
+    8 Dekl: id_token . '=' Matrix
+    9     | id_token .
+
+    '='  shift, and go to state 12
+
+    $default  reduce using rule 9 (Dekl)
+
+
+State 7
+
+    5 Dodela: matrix_token NizDekl .
+    6 NizDekl: NizDekl . ',' Dekl
+
+    ','  shift, and go to state 13
+
+    $default  reduce using rule 5 (Dodela)
+
+
+State 8
+
+    7 NizDekl: Dekl .
+
+    $default  reduce using rule 7 (NizDekl)
+
+
+State 9
+
+    4 Naredba: print_token id_token .
+
+    $default  reduce using rule 4 (Naredba)
+
+
+State 10
+
+    0 $accept: Program $end .
+
+    $default  accept
+
+
+State 11
+
+    1 Program: Naredba ';' . Program
+
+    matrix_token  shift, and go to state 1
+    print_token   shift, and go to state 2
+
+    $default  reduce using rule 2 (Program)
+
+    Program  go to state 14
+    Naredba  go to state 4
+    Dodela   go to state 5
+
+
+State 12
+
+    8 Dekl: id_token '=' . Matrix
+
+    '['  shift, and go to state 15
+
+    Matrix  go to state 16
+
+
+State 13
+
+    6 NizDekl: NizDekl ',' . Dekl
+
+    id_token  shift, and go to state 6
+
+    Dekl  go to state 17
+
+
+State 14
+
+    1 Program: Naredba ';' Program .
+
+    $default  reduce using rule 1 (Program)
+
+
+State 15
+
+   10 Matrix: '[' . NizVrsta ']'
+
+    num_token  shift, and go to state 18
+
+    NizVrsta  go to state 19
+    Vrsta     go to state 20
+
+
+State 16
+
+    8 Dekl: id_token '=' Matrix .
+
+    $default  reduce using rule 8 (Dekl)
+
+
+State 17
+
+    6 NizDekl: NizDekl ',' Dekl .
+
+    $default  reduce using rule 6 (NizDekl)
+
+
+State 18
+
+   14 Vrsta: num_token .
+
+    $default  reduce using rule 14 (Vrsta)
+
+
+State 19
+
+   10 Matrix: '[' NizVrsta . ']'
+   11 NizVrsta: NizVrsta . ';' Vrsta
+
+    ';'  shift, and go to state 21
+    ']'  shift, and go to state 22
+
+
+State 20
+
+   12 NizVrsta: Vrsta .
+   13 Vrsta: Vrsta . ',' num_token
+
+    ','  shift, and go to state 23
+
+    $default  reduce using rule 12 (NizVrsta)
+
+
+State 21
+
+   11 NizVrsta: NizVrsta ';' . Vrsta
+
+    num_token  shift, and go to state 18
+
+    Vrsta  go to state 24
+
+
+State 22
+
+   10 Matrix: '[' NizVrsta ']' .
+
+    $default  reduce using rule 10 (Matrix)
+
+
+State 23
+
+   13 Vrsta: Vrsta ',' . num_token
+
+    num_token  shift, and go to state 25
+
+
+State 24
+
+   11 NizVrsta: NizVrsta ';' Vrsta .
+   13 Vrsta: Vrsta . ',' num_token
+
+    ','  shift, and go to state 23
+
+    $default  reduce using rule 11 (NizVrsta)
+
+
+State 25
+
+   13 Vrsta: Vrsta ',' num_token .
+
+    $default  reduce using rule 13 (Vrsta)
